@@ -1,0 +1,132 @@
+@startuml
+skinparam backgroundColor white
+skinparam classAttributeIconSize 0
+skinparam classFontSize 13
+skinparam classAttributeFontSize 11
+skinparam classHeaderBackgroundColor #1E3A5F
+skinparam classFontColor white
+skinparam classAttributeBackgroundColor #FEFEF5
+skinparam classBorderColor #1E3A5F
+skinparam ArrowThickness 1.5
+skinparam shadowing false
+left to right direction
+
+title F1 Race Performance Analysis Tool - Class Diagram
+
+class Season {
+  - year : int
+  - name : String
+  --
+  + getYear() : int
+  + getName() : String
+  + getRaces() : List<Race>
+  + setSeasonList(list : List<Season>) : void
+}
+class Race {
+  - name : String
+  - location : String
+  - round : int
+  - date : Date
+  --
+  + getName() : String
+  + getLocation() : String
+  + getRound() : int
+  + getDate() : Date
+  + getSessions() : List<Session>
+}
+class Session {
+  - type : String
+  - date : Date
+  - totalLaps : int
+  --
+  + getType() : String
+  + getTotalLaps() : int
+  + getCurrentSession() : Session
+  + loadSession(year : int, race : String, type : String) : void
+  + getDrivers() : List<Driver>
+}
+class Driver {
+  - name : String
+  - abbreviation : String
+  - number : int
+  --
+  + getName() : String
+  + getAbbreviation() : String
+  + getNumber() : int
+  + getSelectedDrivers() : List<Driver>
+  + setSelectedDrivers(drivers : List<Driver>) : void
+  + validateSelection(abbrev : String) : boolean
+  + loadDriversForSession(s : Session) : List<Driver>
+}
+class Team {
+  - name : String
+  - color : String
+  --
+  + getName() : String
+  + getColor() : String
+}
+class LapTime {
+  - lapNumber : int
+  - time : Duration
+  - sector1 : Duration
+  - sector2 : Duration
+  - sector3 : Duration
+  --
+  + getLapNumber() : int
+  + getTime() : Duration
+  + getSectors() : Duration[]
+  + fetchLapTimes(driver : Driver, session : Session) : List<LapTime>
+}
+class Position {
+  - lapNumber : int
+  - position : int
+  --
+  + getLapNumber() : int
+  + getPosition() : int
+  + fetchPositionHistory(driver : Driver, session : Session) : List<Position>
+}
+class TyreStint {
+  - stintNumber : int
+  - startLap : int
+  - endLap : int
+  --
+  + getStintNumber() : int
+  + getStartLap() : int
+  + getEndLap() : int
+  + storeStintData(data : List<TyreStint>) : void
+}
+class TyreCompound {
+  - name : String
+  - color : String
+  - hardness : String
+  --
+  + getName() : String
+  + getColor() : String
+  + getHardness() : String
+  + resolveCompounds(stints : List<TyreStint>) : List<String>
+}
+class Chart {
+  - title : String
+  - xAxisLabel : String
+  - yAxisLabel : String
+  --
+  + getTitle() : String
+  + getXAxisLabel() : String
+  + getYAxisLabel() : String
+  + generateComparisonChart(d1 : List<LapTime>, d2 : List<LapTime>) : Chart
+  + generatePositionChart(d1 : List<Position>, d2 : List<Position>, laps : int) : Chart
+  + renderChart(chart : Chart) : void
+}
+
+Season "1" --> "0..*" Race : contains >
+Race "1" --> "1..*" Session : has >
+Session "0..*" --> "1..*" Driver : participates in >
+Driver "0..*" --> "1" Team : belongs to >
+Driver "1" --> "0..*" LapTime : records >
+Driver "1" --> "0..*" Position : holds >
+Driver "1" --> "0..*" TyreStint : uses >
+TyreStint "0..*" --> "1" TyreCompound : of type >
+LapTime "0..*" --> "1" Chart : visualized in >
+Position "0..*" --> "1" Chart : visualized in >
+
+@enduml
