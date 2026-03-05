@@ -1,0 +1,57 @@
+@startuml
+skinparam backgroundColor white
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam ParticipantPadding 20
+
+title Select Season / Race / Session
+
+actor "User" as User
+boundary "Session Selection View" as GUI
+control "Session Controller" as CTRL
+entity "Season" as SEASON
+entity "Race" as RACE
+entity "Session" as SESSION
+actor "FastF1 API" as API
+
+User -> GUI : openSelectionPanel()
+activate GUI
+GUI -> CTRL : requestAvailableSeasons()
+activate CTRL
+CTRL -> API : fetchSeasons()
+activate API
+API --> CTRL : return seasonList
+deactivate API
+CTRL -> SEASON : setSeasonList(seasonList)
+CTRL --> GUI : displaySeasons(seasonList)
+deactivate CTRL
+User -> GUI : selectSeason(year)
+GUI -> CTRL : onSeasonSelected(year)
+activate CTRL
+CTRL -> API : fetchRaces(year)
+activate API
+API --> CTRL : return raceList
+deactivate API
+CTRL -> RACE : setRaceList(raceList)
+CTRL --> GUI : displayRaces(raceList)
+deactivate CTRL
+User -> GUI : selectRace(raceName)
+GUI -> CTRL : onRaceSelected(raceName)
+activate CTRL
+CTRL -> API : fetchSessions(year, raceName)
+activate API
+API --> CTRL : return sessionList
+deactivate API
+CTRL -> SESSION : setSessionList(sessionList)
+CTRL --> GUI : displaySessions(sessionList)
+deactivate CTRL
+User -> GUI : selectSession(sessionType)
+GUI -> CTRL : onSessionConfirmed(year, raceName, sessionType)
+activate CTRL
+CTRL -> SESSION : loadSession(year, raceName, sessionType)
+CTRL --> GUI : confirmSelection()
+deactivate CTRL
+GUI --> User : showConfirmation("Session loaded")
+deactivate GUI
+
+@enduml
