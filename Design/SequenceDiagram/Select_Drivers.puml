@@ -1,0 +1,51 @@
+@startuml
+skinparam backgroundColor white
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam ParticipantPadding 20
+
+title Select Drivers (up to 2)
+
+actor "User" as User
+boundary "Driver Selection View" as GUI
+control "Driver Controller" as CTRL
+entity "Session" as SESSION
+entity "Driver" as DRIVER
+
+User -> GUI : openDriverPanel()
+activate GUI
+GUI -> CTRL : requestAvailableDrivers()
+activate CTRL
+CTRL -> SESSION : getCurrentSession()
+activate SESSION
+SESSION --> CTRL : return currentSession
+deactivate SESSION
+CTRL -> DRIVER : loadDriversForSession(currentSession)
+activate DRIVER
+DRIVER --> CTRL : return driverList
+deactivate DRIVER
+CTRL --> GUI : displayDriverList(driverList)
+deactivate CTRL
+User -> GUI : selectDriver(driverAbbrev)
+GUI -> CTRL : onDriverSelected(driverAbbrev)
+activate CTRL
+CTRL -> DRIVER : validateSelection(driverAbbrev)
+activate DRIVER
+DRIVER --> CTRL : validationResult
+deactivate DRIVER
+alt Valid selection
+  CTRL --> GUI : highlightDriver(driverAbbrev)
+else Exceeds 2 drivers
+  CTRL --> GUI : showError("Max 2 drivers allowed")
+end
+deactivate CTRL
+User -> GUI : confirmDrivers()
+GUI -> CTRL : submitSelection(selectedDrivers)
+activate CTRL
+CTRL -> DRIVER : setSelectedDrivers(selectedDrivers)
+CTRL --> GUI : confirmDrivers(selectedDrivers)
+deactivate CTRL
+GUI --> User : showConfirmation("Drivers confirmed")
+deactivate GUI
+
+@enduml
