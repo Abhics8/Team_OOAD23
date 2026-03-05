@@ -1,0 +1,41 @@
+@startuml
+skinparam backgroundColor white
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam ParticipantPadding 20
+
+title View Position Over Laps
+
+actor "User" as User
+boundary "Position Tracking View" as GUI
+control "Position Controller" as CTRL
+control "Chart Generator" as CHART
+entity "Session" as SESSION
+entity "Position" as POS
+
+User -> GUI : requestPositionChart()
+activate GUI
+GUI -> CTRL : loadPositionData()
+activate CTRL
+CTRL -> SESSION : getTotalLaps()
+activate SESSION
+SESSION --> CTRL : return totalLaps
+deactivate SESSION
+CTRL -> POS : fetchPositionHistory(driver1, session)
+activate POS
+POS --> CTRL : return positionHistory_d1
+deactivate POS
+CTRL -> POS : fetchPositionHistory(driver2, session)
+activate POS
+POS --> CTRL : return positionHistory_d2
+deactivate POS
+CTRL -> CHART : generatePositionChart(positionHistory_d1, positionHistory_d2, totalLaps)
+activate CHART
+CHART --> CTRL : return chartObject
+deactivate CHART
+CTRL --> GUI : renderChart(chartObject)
+deactivate CTRL
+GUI --> User : displayPositionChart()
+deactivate GUI
+
+@enduml
