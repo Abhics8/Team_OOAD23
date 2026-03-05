@@ -1,0 +1,41 @@
+@startuml
+skinparam backgroundColor white
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam ParticipantPadding 20
+
+title View Lap Time Comparison
+
+actor "User" as User
+boundary "Lap Time Comparison View" as GUI
+control "LapTime Controller" as CTRL
+control "Chart Generator" as CHART
+entity "Driver" as DRIVER
+entity "LapTime" as LAPTIME
+
+User -> GUI : requestLapTimeComparison()
+activate GUI
+GUI -> CTRL : loadComparison()
+activate CTRL
+CTRL -> DRIVER : getSelectedDrivers()
+activate DRIVER
+DRIVER --> CTRL : return [driver1, driver2]
+deactivate DRIVER
+CTRL -> LAPTIME : fetchLapTimes(driver1, session)
+activate LAPTIME
+LAPTIME --> CTRL : return lapData_d1
+deactivate LAPTIME
+CTRL -> LAPTIME : fetchLapTimes(driver2, session)
+activate LAPTIME
+LAPTIME --> CTRL : return lapData_d2
+deactivate LAPTIME
+CTRL -> CHART : generateComparisonChart(lapData_d1, lapData_d2)
+activate CHART
+CHART --> CTRL : return chartObject
+deactivate CHART
+CTRL --> GUI : renderChart(chartObject)
+deactivate CTRL
+GUI --> User : displayLapTimeChart()
+deactivate GUI
+
+@enduml
