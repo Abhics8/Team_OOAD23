@@ -1,0 +1,38 @@
+@startuml
+skinparam backgroundColor white
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+skinparam ParticipantPadding 20
+
+title View Tyre Stints
+
+actor "User" as User
+boundary "Tyre Stint View" as GUI
+control "TyreStrategy Controller" as CTRL
+actor "FastF1 API" as API
+entity "TyreStint" as STINT
+entity "TyreCompound" as TYRE
+
+User -> GUI : requestTyreStintView()
+activate GUI
+GUI -> CTRL : loadTyreStints()
+activate CTRL
+CTRL -> API : requestStintData(driver1, session)
+activate API
+API --> CTRL : return rawStintData_d1
+deactivate API
+CTRL -> API : requestStintData(driver2, session)
+activate API
+API --> CTRL : return rawStintData_d2
+deactivate API
+CTRL -> STINT : storeStintData(rawStintData_d1, rawStintData_d2)
+CTRL -> TYRE : resolveCompounds(stintData)
+activate TYRE
+TYRE --> CTRL : return compoundLabels
+deactivate TYRE
+CTRL --> GUI : renderStintVisualization(stintData, compoundLabels)
+deactivate CTRL
+GUI --> User : displayTyreStintChart()
+deactivate GUI
+
+@enduml
