@@ -124,6 +124,11 @@ def render_sidebar():
             with st.spinner("Loading session data from FastF1..."):
                 ff1_session = session_ctrl.setActiveSession(selected_year, selected_race, selected_session)
                 if ff1_session is not None:
+                    # Clear chart caches from previous sessions
+                    for key in list(st.session_state.keys()):
+                        if key.startswith("chart_"):
+                            del st.session_state[key]
+
                     drivers = driver_ctrl.getAvailableDrivers(ff1_session)
                     st.session_state.ff1_session = ff1_session
                     st.session_state.drivers = drivers

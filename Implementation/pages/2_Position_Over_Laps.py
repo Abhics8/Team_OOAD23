@@ -71,12 +71,18 @@ def requestPositionChart():
 
     st.markdown("---")
 
-    # Load data and display chart
-    controller = PositionController()
+    if "position_ctrl" not in st.session_state:
+        st.session_state.position_ctrl = PositionController()
+    controller = st.session_state.position_ctrl
 
-    with st.spinner("Generating position chart..."):
-        chart = controller.loadPositionData(ff1_session, driver1, driver2)
-        displayChart(chart)
+    session_id = ff1_session.session_info['Meeting']['Key'] if hasattr(ff1_session, 'session_info') else "session"
+    cache_key = f"chart_position_{session_id}_{driver1.getAbbreviation()}_{driver2.getAbbreviation()}"
+
+    if cache_key not in st.session_state:
+        with st.spinner("Generating position chart..."):
+            st.session_state[cache_key] = controller.loadPositionData(ff1_session, driver1, driver2)
+            
+    displayChart(st.session_state[cache_key])
 
 
 def displayChart(chart):

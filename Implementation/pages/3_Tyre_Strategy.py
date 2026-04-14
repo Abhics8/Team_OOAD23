@@ -78,12 +78,18 @@ def requestTyreStrategy():
 
     st.markdown("---")
 
-    # Load data and display chart
-    controller = TyreStrategyController()
+    if "tyre_ctrl" not in st.session_state:
+        st.session_state.tyre_ctrl = TyreStrategyController()
+    controller = st.session_state.tyre_ctrl
 
-    with st.spinner("Generating tyre strategy chart..."):
-        chart = controller.loadTyreStints(ff1_session, driver1, driver2)
-        displayChart(chart)
+    session_id = ff1_session.session_info['Meeting']['Key'] if hasattr(ff1_session, 'session_info') else "session"
+    cache_key = f"chart_tyre_{session_id}_{driver1.getAbbreviation()}_{driver2.getAbbreviation()}"
+
+    if cache_key not in st.session_state:
+        with st.spinner("Generating tyre strategy chart..."):
+            st.session_state[cache_key] = controller.loadTyreStints(ff1_session, driver1, driver2)
+            
+    displayChart(st.session_state[cache_key])
 
 
 def displayChart(chart):

@@ -132,14 +132,14 @@ class FastF1DataService:
 
         try:
             laps = ff1_session.laps.pick_driver(driver_abbr)
-            for _, lap in laps.iterrows():
+            for lap in laps.to_dict('records'):
                 lt = lap.get("LapTime")
                 s1 = lap.get("Sector1Time")
                 s2 = lap.get("Sector2Time")
                 s3 = lap.get("Sector3Time")
 
                 lap_time = LapTime(
-                    lapNumber=int(lap.get("LapNumber", 0)),
+                    lapNumber=int(lap.get("LapNumber", 0)) if lap.get("LapNumber") is not None else 0,
                     time=lt if isinstance(lt, timedelta) else None,
                     sector1=s1 if isinstance(s1, timedelta) else None,
                     sector2=s2 if isinstance(s2, timedelta) else None,
@@ -159,10 +159,10 @@ class FastF1DataService:
 
         try:
             laps = ff1_session.laps.pick_driver(driver_abbr)
-            for _, lap in laps.iterrows():
+            for lap in laps.to_dict('records'):
                 pos = Position(
-                    lapNumber=int(lap.get("LapNumber", 0)),
-                    position=int(lap.get("Position", 0)),
+                    lapNumber=int(lap.get("LapNumber", 0)) if lap.get("LapNumber") is not None else 0,
+                    position=int(lap.get("Position", 0)) if lap.get("Position") is not None else 0,
                 )
                 positions.append(pos)
         except Exception as e:
