@@ -7,6 +7,9 @@
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.30+-FF4B4B.svg)](https://streamlit.io/)
 [![FastF1](https://img.shields.io/badge/FastF1-3.3+-orange.svg)](https://docs.fastf1.dev/)
 [![Plotly](https://img.shields.io/badge/Plotly-Interactive-brightgreen.svg)](https://plotly.com/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Streamlit%20Cloud-FF4B4B?logo=streamlit)](https://teamooad23-hwm9sxennf9mk2poes7zga.streamlit.app)
+
+> **[Launch Live Dashboard →](https://teamooad23-hwm9sxennf9mk2poes7zga.streamlit.app)**
 
 An interactive, data-driven dashboard for analyzing Formula 1 race telemetry, strategies, and session outcomes. This project applies complete **Object-Oriented Analysis and Design (OOAD)** principles from conceptual requirements to a functional Python web application.
 
