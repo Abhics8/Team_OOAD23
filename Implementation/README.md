@@ -2,6 +2,9 @@
 
 An interactive dashboard for analyzing Formula 1 race data, built as the implementation phase of the OOAD project (CSCI 6234 - Group 23).
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Streamlit%20Cloud-FF4B4B?logo=streamlit)](https://teamooad23-hwm9sxennf9mk2poes7zga.streamlit.app)
+**[Launch Live Dashboard →](https://teamooad23-hwm9sxennf9mk2poes7zga.streamlit.app)**
+
 ## 📸 Features
 
 - **Session Selection** — Choose Season → Race → Session with cascading dropdowns
