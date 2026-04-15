@@ -71,12 +71,18 @@ def requestLapTimeComparison():
 
     st.markdown("---")
 
-    # Load data and display chart
-    controller = LapTimeController()
+    if "laptime_ctrl" not in st.session_state:
+        st.session_state.laptime_ctrl = LapTimeController()
+    controller = st.session_state.laptime_ctrl
 
-    with st.spinner("Generating lap time comparison..."):
-        chart = controller.loadLapTimeComparison(ff1_session, driver1, driver2)
-        displayChart(chart)
+    session_id = ff1_session.session_info['Meeting']['Key'] if hasattr(ff1_session, 'session_info') else "session"
+    cache_key = f"chart_laptime_{session_id}_{driver1.getAbbreviation()}_{driver2.getAbbreviation()}"
+
+    if cache_key not in st.session_state:
+        with st.spinner("Generating lap time comparison..."):
+            st.session_state[cache_key] = controller.loadLapTimeComparison(ff1_session, driver1, driver2)
+    
+    displayChart(st.session_state[cache_key])
 
 
 def displayChart(chart):
