@@ -4,6 +4,7 @@ Corresponds to the FastF1DataService <<service>> class in the Class Diagram.
 Wraps the FastF1 library to fetch F1 session data.
 """
 
+import os
 import fastf1
 import streamlit as st
 from typing import List, Optional
@@ -13,8 +14,10 @@ from models.entities import (
 )
 from datetime import timedelta
 
-# Enable FastF1 cache
-fastf1.Cache.enable_cache("f1_cache")
+# Enable FastF1 cache — auto-create dir so it works on Streamlit Cloud
+_CACHE_DIR = os.path.join(os.path.dirname(__file__), "..", "f1_cache")
+os.makedirs(_CACHE_DIR, exist_ok=True)
+fastf1.Cache.enable_cache(_CACHE_DIR)
 
 # Tyre compound color mapping
 COMPOUND_COLORS = {
