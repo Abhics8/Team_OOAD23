@@ -26,7 +26,7 @@ else (no)
   :Display error message\n"Lap time data not available\nfor selected drivers";
 endif
 
-stop
+end
 
 @enduml
 

@@ -28,7 +28,7 @@ else (no)
   :Display warning\n"Select at least 2 drivers to compare";
 endif
 
-stop
+end
 
 @enduml
 

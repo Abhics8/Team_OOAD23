@@ -27,7 +27,7 @@ else (no)
   :Display error message\n"Position data not available\nfor selected drivers";
 endif
 
-stop
+end
 
 @enduml
 
