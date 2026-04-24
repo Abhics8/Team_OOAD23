@@ -34,10 +34,10 @@ if (Session data available?) then (yes)
   :Display confirmation of loaded session;
 else (no)
   :Display error message\n"Session data not available";
-  stop
+  end
 endif
 
-stop
+end
 
 @enduml
 
